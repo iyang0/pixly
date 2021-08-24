@@ -21,7 +21,16 @@ class Image(db.Model):
 
     path = db.Column( db.Text,
         nullable=False)
-    
+
+
+    def serialize(self):
+        return {
+            'name': self.name,
+            'filename': self.filename,
+            'path': self.path
+        }
+        
+ 
 def connect_db(app):
     """Connect to database."""
 
