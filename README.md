@@ -20,6 +20,8 @@ Frontend
 
 Backend
 (Flask)
+-Use pillow library for image manipulation
+
   get images
   -> make axios call to s3 to get all the images' urls
   -> can filter, use PostgreSQL full-text search
