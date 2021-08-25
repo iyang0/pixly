@@ -7,11 +7,14 @@ import boto3
 from dotenv import load_dotenv
 
 load_dotenv()
+
 s3 = boto3.resource('s3')
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pixly'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
+
+BUCKET_NAME = os.getenv('BUCKET_NAME')
 
 connect_db(app)
 db.create_all()
@@ -43,12 +46,12 @@ def test():
     """return the details of a single image"""
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",s3)
     # breakpoint()
-    bucket = "ivan.pix.ly"
-    key = "oie_24201227QN5XVlNc.jpg"
+    bucket = BUCKET_NAME
+    key = "hubble-space.jpeg"
     url = f'https://s3.us-west-1.amazonaws.com/{bucket}/{key}'
     # print(s3.buckets["ivan.pix.ly"])
-    for bucket in s3.buckets.all():
-        print(bucket.name)
+    # for bucket in s3.buckets.all():
+    #     print(bucket.name)
 
     return f"""<img src={url} alt='fdjkh'/>"""
 
@@ -57,10 +60,10 @@ def add_image():
     """Creates a new image in the db, returns the new image object
     the objects contain image metadata and URL"""
     
+    data = open('test.jpg', 'rb')
+    s3.Bucket('my-bucket').put_object(Key='test.jpg', Body=data)
+
     image = Image()
-
-
-
 
     return jsonify(image.serialize()), 201
 
