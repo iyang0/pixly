@@ -3,6 +3,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import db, connect_db, Image
+from werkzeug import secure_filename
 import os
 import boto3
 from dotenv import load_dotenv
@@ -62,6 +63,8 @@ def add_image():
     """Creates a new image in the db, returns the new image object
     the objects contain image metadata and URL"""
     imagePath = request.json.get("img")
+    f = request.files['img']
+    f.save(secure_filename(f.filename))
     # breakpoint()
     print("IN BACKEND ROUTE ADD_IMG API",imagePath)
     data = open(imagePath, 'rb')

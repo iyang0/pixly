@@ -10,6 +10,13 @@ function AddImageForm() {
       ...fData,
       [name]: value,
     }));
+    // var input = document.getElementById("img");
+    // var fReader = new FileReader();
+    // fReader.readAsDataURL(input.files[0]);
+    // fReader.onloadend = function (event) {
+    //   var img = document.getElementById("img");
+    //   img.src = event.target.result;
+    // }
   }
 
   // Sends search back to parent component
@@ -20,6 +27,7 @@ function AddImageForm() {
     await PixlyApi.addImage(formData)
     // await PixlyApi.getAllImages()
   }
+  
   return (
     <div className="AddImageForm">
       <form action="/localhost:5000/images" method="POST" onSubmit={handleSubmit}>
