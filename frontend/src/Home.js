@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchForm from "./SearchForm";
 import ImageList from "./ImageList";
+import PixlyApi from "./api";
 
 /** Home: shows image search form that filters images shown
  * 
@@ -15,7 +16,10 @@ function Home({ images }) {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(function noLongerLoading() {
+  useEffect(function getAllImagesOnMount() {
+    async function getAllImages() {
+      await PixlyApi.getAllImages
+    }
     setIsLoading(false);
   }, [])
 

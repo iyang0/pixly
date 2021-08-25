@@ -2,24 +2,23 @@ import React, { useState } from "react";
 import PixlyApi from "./api";
 
 function AddImageForm() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({img: ""});
+
+
 
   function handleChange(evt) {
-    // const { name, value } = evt.target;
-    // setFormData((fData) => ({
-    //   ...fData,
-    //   [name]: value,
-    // }));
     var input = evt.target;
     var fReader = new FileReader();
+
+    // readAsDataURL is async - it returns a promise to be fulfilled later
     fReader.readAsDataURL(input.files[0]);
-    // fReader.onloadend = function (event) {
-    //   var img = document.getElementById("img");
-    //   img.src = event.target.result;
-    // }
-    setFormData(() => fReader.result);
-    console.log(fReader);
+    fReader.onloadend = function (event) {
+      console.log("INSIDE ONLOADEND, this is image data:", event.target.result);
+      setFormData({img: event.target.result});
+    }
   }
+
+  console.log(formData)
 
   // Sends search back to parent component
   async function handleSubmit(evt) {
@@ -27,7 +26,6 @@ function AddImageForm() {
     console.log("IN HANDLE SUBMIT FUNCTION", formData);
     // debugger;
     await PixlyApi.addImage(formData)
-    // await PixlyApi.getAllImages()
   }
 
   return (

@@ -3,16 +3,19 @@ import Routes from "./Routes";
 import { BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 import "bootswatch/dist/sandstone/bootstrap.min.css";
+import ImagesContext from "./ImagesContext";
 
 function App() {
   const [ images, setImages ] = useState([]);
 
   
   return (
-    <BrowserRouter>
-      <Nav />
-      <Routes images={images}/>
-    </BrowserRouter>
+    <ImagesContext.Provider value={{images}}>
+      <BrowserRouter>
+        <Nav />
+        <Routes images={images} />
+      </BrowserRouter>
+    </ImagesContext.Provider>
   );
 }
 

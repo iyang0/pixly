@@ -63,10 +63,10 @@ def add_image():
     """Creates a new image in the db, returns the new image object
     the objects contain image metadata and URL"""
     imagePath = request.json.get("img")
-    f = request.files['img']
-    f.save(secure_filename(f.filename))
+    # f = request.files['img']
+    # f.save(secure_filename(f.filename))
     # breakpoint()
-    print("IN BACKEND ROUTE ADD_IMG API",imagePath)
+    print("IN BACKEND ROUTE ADD_IMG API", imagePath)
     data = open(imagePath, 'rb')
     s3.Bucket(BUCKET_NAME).put_object(Key='test.jpg', Body=data)
 

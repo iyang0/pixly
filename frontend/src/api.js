@@ -17,7 +17,6 @@ class PixlyApi {
   /** Get all the images. */
 
   static async getAllImages() {
-    // let res = await this.request(`images`);
     console.log("IN getAllImages")
     let res = await axios.get(`${BASE_URL}/images`)
     return res.data;
@@ -26,23 +25,23 @@ class PixlyApi {
   /** Get specific image. */
 
   static async getImage(id) {
-    let res = await this.request(`images/${id}`);
-    return res;
+    let res = await axios.get(`${BASE_URL}/images/${id}`);
+    return res.data;
   }
 
   /** Add a new image. */
 
-  static async addImage(newImageUrl) {
-    console.log("IN API TO ADD IMAGE", newImageUrl);
-    let res = await axios.post(`${BASE_URL}/images`, newImageUrl);
-    return res;
+  static async addImage(newImage) {
+    console.log("IN API TO ADD IMAGE", newImage);
+    let res = await axios.post(`${BASE_URL}/images`, newImage);
+    return res.data;
   }
 
   /** Update specific image. */
 
   static async updateImage(updatedImage) {
-    let res = await this.request(`images/${updatedImage.id}`, updatedImage, "patch");
-    return res;
+    let res = await axios.patch(`${BASE_URL}/images/${updatedImage.id}`, updatedImage);
+    return res.data;
   }
 }
 
