@@ -12,6 +12,7 @@ import EditImageForm from "./EditImageForm";
 
 function Routes( {images} ) {
 
+  console.log(images);
   return (
     <div className="Routes">
       <Switch>
@@ -19,12 +20,12 @@ function Routes( {images} ) {
           <Home images={images}/>
         </Route>
 
-        <Route exact path="/:id">
-          <ImageDetails images={images}/>
-        </Route>
-
         <Route exact path="/add-image">
           <AddImageForm />
+        </Route>
+
+        <Route exact path="/:id">
+          <ImageDetails images={images}/>
         </Route>
 
         <Route exact path="/:id/edit">

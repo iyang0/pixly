@@ -1,6 +1,7 @@
 """pixly backend, JSON API"""
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from models import db, connect_db, Image
 import os
 import boto3
@@ -16,6 +17,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 BUCKET_NAME = os.getenv('BUCKET_NAME')
 
+CORS(app)
 connect_db(app)
 db.create_all()
 
@@ -59,13 +61,15 @@ def test():
 def add_image():
     """Creates a new image in the db, returns the new image object
     the objects contain image metadata and URL"""
-    
-    data = open('test.jpg', 'rb')
-    s3.Bucket('my-bucket').put_object(Key='test.jpg', Body=data)
+    imagePath = request.json.get("img")
+    # breakpoint()
+    print("IN BACKEND ROUTE ADD_IMG API",imagePath)
+    data = open(imagePath, 'rb')
+    s3.Bucket(BUCKET_NAME).put_object(Key='test.jpg', Body=data)
 
-    image = Image()
+    # image = Image()
 
-    return jsonify(image.serialize()), 201
+    return jsonify({"status":"works"}), 201
 
 
 @app.route('/images/<id>', methods=["PATCH"])

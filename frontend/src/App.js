@@ -7,7 +7,6 @@ function App() {
   const [ images, setImages ] = useState([]);
 
   
-
   return (
     <BrowserRouter>
       <Nav />

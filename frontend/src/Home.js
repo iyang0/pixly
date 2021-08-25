@@ -11,13 +11,13 @@ import ImageList from "./ImageList";
  *  isLoading
  */
 
-function Home({images}) {
-  
-  const [ isLoading, setIsLoading ] = useState(true);
+function Home({ images }) {
 
-  useEffect(function noLongerLoading(){
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(function noLongerLoading() {
     setIsLoading(false);
-  },[])
+  }, [])
 
   if (isLoading) return <div>Is Loading...</div>;
 
@@ -25,7 +25,10 @@ function Home({images}) {
     <div>
       HOME
       <SearchForm />
-      <ImageList />
+      <ImageList images={
+        [{ url: "https://i.imgur.com/x2Xf5nj.jpeg", name: "cat1" },
+        { url: "https://i.imgur.com/O6SqEc1.jpeg", name: "cat2" }]
+      } />
     </div>
   )
 }

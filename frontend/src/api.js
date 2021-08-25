@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000";
 
 /** API Class.
  *
@@ -12,30 +12,15 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
 class PixlyApi {
 
-  static async request(endpoint, data = {}, method = "get") {
-    console.debug("API Call:", endpoint, data, method);
-
-    const url = `${BASE_URL}/${endpoint}`;
-    const params = (method === "get")
-      ? data
-      : {};
-
-    try {
-      return (await axios({ url, method, data, params })).data;
-    } catch (err) {
-      console.error("API Error:", err.response);
-      let message = err.response.data.error.message;
-      throw Array.isArray(message) ? message : [message];
-    }
-  }
-
   // Individual API routes
 
   /** Get all the images. */
 
   static async getAllImages() {
-    let res = await this.request(`images`);
-    return res;
+    // let res = await this.request(`images`);
+    console.log("IN getAllImages")
+    let res = await axios.get(`${BASE_URL}/images`)
+    return res.data;
   }
 
   /** Get specific image. */
@@ -47,8 +32,9 @@ class PixlyApi {
 
   /** Add a new image. */
 
-  static async addImage(newImage) {
-    let res = await this.request(`images`, newImage, "post");
+  static async addImage(newImageUrl) {
+    console.log("IN API TO ADD IMAGE",newImageUrl);
+    let res = await axios.post(`${BASE_URL}/images`, newImageUrl);
     return res;
   }
 

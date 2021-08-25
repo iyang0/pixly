@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PixlyApi from "./api";
 
 function AddImageForm() {
   const [ formData, setFormData] = useState({});
@@ -14,13 +15,15 @@ function AddImageForm() {
   // Sends search back to parent component
   async function handleSubmit(evt) {
     evt.preventDefault();
-    console.log(formData);
-
+    console.log("IN HANDLE SUBMIT FUNCTION",formData);
+    // debugger;
+    await PixlyApi.addImage(formData)
+    // await PixlyApi.getAllImages()
   }
   return (
-    <div classname="AddImageForm">
+    <div className="AddImageForm">
       <form action="/localhost:5000/images" method="POST" onSubmit={handleSubmit}>
-          <label for="img"> Upload Image</label>
+          <label htmlFor="img"> Upload Image</label>
         <input onChange={handleChange} type="file" id="img" name="img" accept="image/*">
           </input>
         <button type="submit">Upload Image</button>

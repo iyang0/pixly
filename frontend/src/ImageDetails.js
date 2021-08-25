@@ -1,5 +1,5 @@
 function ImageDetails(images){
-  return (<div>{images}</div>)
+  return (<div>ABC</div>)
 }
 
 export default ImageDetails;
