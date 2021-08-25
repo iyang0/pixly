@@ -3,7 +3,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import db, connect_db, Image
-from werkzeug import secure_filename
+# from PIL import Image
+import base64
+# from werkzeug import secure_filename
 import os
 import boto3
 from dotenv import load_dotenv
@@ -62,13 +64,10 @@ def test():
 def add_image():
     """Creates a new image in the db, returns the new image object
     the objects contain image metadata and URL"""
-    imagePath = request.json.get("img")
-    # f = request.files['img']
-    # f.save(secure_filename(f.filename))
-    # breakpoint()
-    print("IN BACKEND ROUTE ADD_IMG API", imagePath)
-    data = open(imagePath, 'rb')
-    s3.Bucket(BUCKET_NAME).put_object(Key='test.jpg', Body=data)
+    imageBinary = request.json.get("img")
+    print("IN BACKEND ROUTE ADD_IMG API", imageBinary)
+    image = base64.b64decode(imageBinary)
+    s3.Bucket(BUCKET_NAME).put_object(Key='test.jpg', ContentType="image/jpeg", Body=image)
 
     # image = Image()
 

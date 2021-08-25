@@ -33,7 +33,11 @@ class PixlyApi {
 
   static async addImage(newImage) {
     console.log("IN API TO ADD IMAGE", newImage);
-    let res = await axios.post(`${BASE_URL}/images`, newImage);
+    let res = await axios({
+      method: "post",
+      url: `${BASE_URL}/images`,
+      data: newImage,
+    })
     return res.data;
   }
 
