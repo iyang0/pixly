@@ -1,4 +1,3 @@
-from app import app
 from models import db, Image
 import os
 import boto3

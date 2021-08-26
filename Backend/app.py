@@ -9,6 +9,7 @@ import base64
 import io
 import os
 import boto3
+import requests
 from dotenv import load_dotenv
 
 
@@ -63,28 +64,29 @@ def add_image():
         return jsonify({400: "The file sent was not a valid image"}), 400
 
     image_data = base64.b64decode(data)
+    image_bytes = io.BytesIO(image_data)
     # io.BytesIO turns the decoded string into a bytes str
     s3.Bucket(BUCKET_NAME).put_object(
         Key=filename, 
         ContentType="image/jpeg", 
-        Body=io.BytesIO(image_data), 
+        Body=image_bytes, 
         ACL="public-read")
 
+    exifDict = getExifDict(image_bytes)
+
     image_path=f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/{filename}"
-    image = Pillow.open(image_path)
-    exifdata = image.getexif()
 
-    # iterating over all EXIF data fields
-    for tag_id in exifdata:
-        # get the tag name, instead of human unreadable tag id
-        tag = TAGS.get(tag_id, tag_id)
-        data = exifdata.get(tag_id)
-        # decode bytes 
-        if isinstance(data, bytes):
-            data = data.decode()
-        print(f"{tag:25}: {data}")
-
-    newImage = Image(title=title, path=image_path, filename=filename)
+    newImage = Image(
+      title=title, 
+      path=image_path, 
+      filename=filename,
+      Make=exifDict.Make if exifDict.Make else None, 
+      Model=exifDict.Model if exifDict.Model else None,
+      ShutterSpeedValue=exifDict.ShutterSpeedValue if exifDict.ShutterSpeedValue else None,
+      ApertureValue=exifDict.ApertureValue if exifDict.ApertureValue else None,
+      ISO=exifDict.ISO if exifDict.ISO else None,
+      DateTimeOriginal=exifDict.DateTimeOriginal if exifDict.DateTimeOriginal else None
+      )
     db.session.add(newImage)
     db.session.commit()
     
@@ -100,3 +102,24 @@ def update_image(id):
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify({e.code:e.description}), 404
+
+
+def getExifDict(imageBinary):
+    # image_path = f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/38465451442_fc53a0632d_o.jpg"
+    # response = requests.get(image_path)
+    # image = Pillow.open(io.BytesIO(response.content), mode="r")
+    image = Pillow.open(imageBinary)
+    exifdata = image.getexif()
+
+    # iterating over all EXIF data fields
+    exifDict = {}
+    for tag_id in exifdata:
+        # get the tag name, instead of human unreadable tag id
+        tag = TAGS.get(tag_id, tag_id)
+        data = exifdata.get(tag_id)
+        # decode bytes 
+        if isinstance(data, bytes):
+            data = data.decode()
+        exifDict[tag] = data
+
+    return exifDict
