@@ -18,7 +18,6 @@ function Home({loading}) {
 
   return (
     <div>
-      HOME
       <SearchForm />
       <ImageList />
     </div>

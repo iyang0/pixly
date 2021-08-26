@@ -1,14 +1,25 @@
-import { useContext } from 'react';
-import ImagesContext from './ImagesContext';
 import { useParams } from "react-router-dom";
 import ImageCard from './ImageCard';
+import PixlyApi from "./api";
+import { useState, useEffect } from "react";
 
 function ImageDetails(){
   const { id } = useParams();
-  const {images} = useContext(ImagesContext);
-  console.log("ID", id);
-  let image = images.find(image => +image.id === +id);
-  console.log("IMAGE", image);
+  const [isLoading, setIsLoading] = useState(true);
+  const [image, setImage] = useState({});
+
+  useEffect(function getImageOnMount() {
+    async function getImage() {
+      let imageFromAPI = await PixlyApi.getImage(id);
+      console.log("GET IMAGE", imageFromAPI);
+      setImage(imageFromAPI)
+    }
+    getImage();
+    setIsLoading(false);
+  }, [id])
+
+  if (isLoading) return <div>Is Loading...</div>;
+
   return (
   <div className="container">
     <ImageCard image={image}/>
