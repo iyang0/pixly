@@ -13,7 +13,7 @@ class Image(db.Model):
         primary_key=True,
         autoincrement=True)
 
-    name = db.Column( db.Text,
+    title = db.Column( db.Text,
         nullable=False)
 
     filename = db.Column( db.Text,
@@ -25,7 +25,7 @@ class Image(db.Model):
 
     def serialize(self):
         return {
-            'name': self.name,
+            'name': self.title,
             'filename': self.filename,
             'path': self.path
         }

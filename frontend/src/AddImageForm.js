@@ -2,18 +2,34 @@ import React, { useState } from "react";
 import PixlyApi from "./api";
 
 function AddImageForm() {
-  const [formData, setFormData] = useState({img: ""});
+  const [formData, setFormData] = useState({ img: "" });
 
 
 
   function handleChange(evt) {
-    var input = evt.target;
-    var fReader = new FileReader();
+    const { name, value } = evt.target;
+  
+    if (name === "title") {
+      setFormData((fData) => ({
+        ...fData,
+        [name]: value,
+      }));
+    } else {
+      let value = evt.target;
+      let fReader = new FileReader();
+      let filenameArr = value.value.split("\\")
+      let filename = filenameArr[filenameArr.length - 1];
 
-    // readAsDataURL is async - it returns a promise to be fulfilled later
-    fReader.readAsDataURL(input.files[0]);
-    fReader.onloadend = function (event) {
-      setFormData({img: event.target.result});
+      // readAsDataURL is async - it returns a promise to be fulfilled later
+      fReader.readAsDataURL(value.files[0]);
+      fReader.onloadend = function (event) {
+        setFormData((fData) => ({
+          ...fData, 
+          img: event.target.result, 
+          filename 
+        }));
+        console.log(event.target.result);
+      }
     }
   }
 
@@ -28,14 +44,16 @@ function AddImageForm() {
   return (
     <div className="AddImageForm">
       <form action="/localhost:5000/images" method="POST" onSubmit={handleSubmit}>
+        <label htmlFor="title">Title:</label>
+        <input className="form-control" name="title" type="text" onChange={handleChange} required></input>
         <label htmlFor="img"> Upload Image</label>
-        <input 
-          onChange={handleChange} 
-          type="file" 
-          id="img" 
-          name="img" 
+        <input
+          onChange={handleChange}
+          type="file"
+          id="img"
+          name="img"
           accept="image/*"
-          className="form-control"/>
+          className="form-control" />
         <button className="btn btn-primary" type="submit">Upload Image</button>
       </form>
     </div>

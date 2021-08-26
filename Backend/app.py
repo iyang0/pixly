@@ -5,6 +5,7 @@ from flask_cors import CORS
 from models import db, connect_db, Image
 # from PIL import Image
 import base64
+import io
 # from werkzeug import secure_filename
 import os
 import boto3
@@ -64,13 +65,23 @@ def test():
 def add_image():
     """Creates a new image in the db, returns the new image object
     the objects contain image metadata and URL"""
+
     imageBinary = request.json.get("img")
+    filename = request.json.get("filename")
+    title = request.json.get("title")
     print("IN BACKEND ROUTE ADD_IMG API", imageBinary)
-    image = base64.b64decode(imageBinary)
-    s3.Bucket(BUCKET_NAME).put_object(Key='test.jpg', ContentType="image/jpeg", Body=image)
 
-    # image = Image()
+    if 'data:' in imageBinary and ';base64,' in imageBinary:
+        # Break out the header from the base64 content
+        data = imageBinary.split(';base64,')[1]
+    image = base64.b64decode(data)
+    # io.BytesIO turns the decoded string into a bytes str
+    s3.Bucket(BUCKET_NAME).put_object(Key=filename, ContentType="image/jpeg", Body=io.BytesIO(image), ACL="public-read")
 
+    newImage = Image(title=title, path=f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/{filename}", filename=filename)
+    db.session.add(newImage)
+    db.session.commit()
+    
     return jsonify({"status":"works"}), 201
 
 
