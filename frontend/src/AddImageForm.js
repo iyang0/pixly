@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PixlyApi from "./api";
+import { useHistory } from "react-router-dom";
+import ImagesContext from './ImagesContext';
 
 function AddImageForm() {
-  const [formData, setFormData] = useState({ img: "" });
+  const { setIsLoading, setImages, images } = useContext(ImagesContext);
 
+  const [formData, setFormData] = useState({ img: "" });
+  const history = useHistory()
 
 
   function handleChange(evt) {
@@ -38,8 +42,10 @@ function AddImageForm() {
   // Sends search back to parent component
   async function handleSubmit(evt) {
     evt.preventDefault();
-    await PixlyApi.addImage(formData);
-    //TODO history.push to either image detail or home
+    let newImage = await PixlyApi.addImage(formData);
+    setIsLoading(true);
+    setImages((images) => [...images, newImage.image])
+    history.push("/");
   }
 
   return (

@@ -5,12 +5,15 @@ import ImagesContext from './ImagesContext';
 
 function ImageList(){
   const {images} = useContext(ImagesContext);
-  return(<div>IMAGE LIST
-    <ul>
+
+  return(<div className="ImageList container">IMAGE LIST
+    <div className="row">
       {images.map( image => (
-      <Link to={"/"} key={image.name} ><ImageCard image={image}/></Link>
+        <div className="col-3" key={image.name}>
+          <Link to={`/${image.id}`} className="text-decoration-none" ><ImageCard image={image}/></Link>
+        </div>
       ))}
-    </ul>
+    </div>
   </div>)
 }
 

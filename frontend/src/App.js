@@ -24,8 +24,13 @@ function App() {
     setIsLoading(false);
   }, [])
 
+  useEffect(function reRenderOnImagesChange() {
+    console.log("USE EFFECT", images);
+    setIsLoading(false);
+  }, [images])
+
   return (
-    <ImagesContext.Provider value={{images, setImages}}>
+    <ImagesContext.Provider value={{images, setImages, setIsLoading}}>
       <BrowserRouter>
         <Nav />
         <Routes loading={isLoading}/>

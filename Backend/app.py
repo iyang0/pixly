@@ -52,8 +52,7 @@ def add_image():
     the objects contain image metadata and URL"""
 
     image_binary = request.json.get("img")
-    # filename = request.json.get("filename")
-    filename = "test.jpeg"
+    filename = request.json.get("filename")
     title = request.json.get("title")
 
     if 'data:' in image_binary and ';base64,' in image_binary:
