@@ -6,7 +6,6 @@ from models import db, connect_db, Image
 # from PIL import Image
 import base64
 import io
-# from werkzeug import secure_filename
 import os
 import boto3
 from dotenv import load_dotenv
@@ -69,7 +68,6 @@ def add_image():
     imageBinary = request.json.get("img")
     filename = request.json.get("filename")
     title = request.json.get("title")
-    print("IN BACKEND ROUTE ADD_IMG API", imageBinary)
 
     if 'data:' in imageBinary and ';base64,' in imageBinary:
         # Break out the header from the base64 content
@@ -82,7 +80,7 @@ def add_image():
     db.session.add(newImage)
     db.session.commit()
     
-    return jsonify({"status":"works"}), 201
+    return jsonify({"image" : Image.serialize(newImage)}), 201
 
 
 @app.route('/images/<id>', methods=["PATCH"])

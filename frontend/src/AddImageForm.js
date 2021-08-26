@@ -33,12 +33,11 @@ function AddImageForm() {
     }
   }
 
-  console.log(formData)
-
   // Sends search back to parent component
   async function handleSubmit(evt) {
     evt.preventDefault();
     await PixlyApi.addImage(formData);
+    //TODO history.push to either image detail or home
   }
 
   return (
