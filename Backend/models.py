@@ -26,13 +26,45 @@ class Image(db.Model):
         db.Text,
         nullable=False)
 
+####### These below come from exif data
+
+    Make = db.Column(
+        db.Text
+    )
+
+    Model = db.Column(
+        db.Text
+    )
+
+    ShutterSpeedValue = db.Column(
+        db.Text
+    )
+
+    ApertureValue = db.Column(
+        db.Text
+    )
+
+    ISO = db.Column(
+        db.Integer
+    )
+
+    DateTimeOriginal = db.Column(
+        db.DateTime
+    )
+
 
     def serialize(self):
         return {
             'id': self.id,
             'name': self.title,
             'filename': self.filename,
-            'path': self.path
+            'path': self.path,
+            'Make': self.Make,
+            'Model': self.Model,
+            'ShutterSpeedValue': self.ShutterSpeedValue,
+            'ApertureValue': self.ApertureValue,
+            'ISO': self.ISO,
+            'DateTimeOriginal': self.DateTimeOriginal,
         }
         
  

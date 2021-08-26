@@ -3,7 +3,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import db, connect_db, Image
-# import PIL
+from PIL import Image as Pillow
+from PIL.ExifTags import TAGS
 import base64
 import io
 import os
@@ -61,15 +62,29 @@ def add_image():
     else:
         return jsonify({400: "The file sent was not a valid image"}), 400
 
-    image = base64.b64decode(data)
+    image_data = base64.b64decode(data)
     # io.BytesIO turns the decoded string into a bytes str
     s3.Bucket(BUCKET_NAME).put_object(
         Key=filename, 
         ContentType="image/jpeg", 
-        Body=io.BytesIO(image), 
+        Body=io.BytesIO(image_data), 
         ACL="public-read")
 
-    newImage = Image(title=title, path=f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/{filename}", filename=filename)
+    image_path=f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/{filename}"
+    image = Pillow.open(image_path)
+    exifdata = image.getexif()
+
+    # iterating over all EXIF data fields
+    for tag_id in exifdata:
+        # get the tag name, instead of human unreadable tag id
+        tag = TAGS.get(tag_id, tag_id)
+        data = exifdata.get(tag_id)
+        # decode bytes 
+        if isinstance(data, bytes):
+            data = data.decode()
+        print(f"{tag:25}: {data}")
+
+    newImage = Image(title=title, path=image_path, filename=filename)
     db.session.add(newImage)
     db.session.commit()
     
