@@ -8,27 +8,29 @@ function AddImageForm() {
 
   function handleChange(evt) {
     const { name, value } = evt.target;
-  
+
     if (name === "title") {
       setFormData((fData) => ({
         ...fData,
         [name]: value,
       }));
     } else {
-      let value = evt.target;
       let fReader = new FileReader();
-      let filenameArr = value.value.split("\\")
+      let filenameArr = evt.target.value.split("\\")
       let filename = filenameArr[filenameArr.length - 1];
 
       // readAsDataURL is async - it returns a promise to be fulfilled later
-      fReader.readAsDataURL(value.files[0]);
+      fReader.readAsDataURL(evt.target.files[0]);
       fReader.onloadend = function (event) {
         setFormData((fData) => ({
-          ...fData, 
-          img: event.target.result, 
-          filename 
+          ...fData,
+          img: event.target.result,
+          filename
         }));
-        console.log(event.target.result);
+      }
+      const [file] = evt.target.files;
+      if (file) {
+        document.getElementById("preview").src = URL.createObjectURL(file);
       }
     }
   }
@@ -54,6 +56,8 @@ function AddImageForm() {
           accept="image/*"
           className="form-control" />
         <button className="btn btn-primary" type="submit">Upload Image</button>
+        <br/>
+        <img style={{height:"200px"}} id="preview" alt="preview" src="https://www.lifewire.com/thmb/eftN2JsqSF2O12jxqA216u4aNYk=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/cloud-upload-a30f385a928e44e199a62210d578375a.jpg"/>
       </form>
     </div>
   )

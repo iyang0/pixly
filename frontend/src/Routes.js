@@ -10,14 +10,13 @@ import EditImageForm from "./EditImageForm";
  * Visiting a non-existant route redirects to the homepage.
  */
 
-function Routes( {images} ) {
+function Routes({loading}) {
 
-  console.log(images);
   return (
     <div className="Routes">
       <Switch>
         <Route exact path="/">
-          <Home images={images}/>
+          <Home loading={loading} />
         </Route>
 
         <Route exact path="/add-image">
@@ -25,7 +24,7 @@ function Routes( {images} ) {
         </Route>
 
         <Route exact path="/:id">
-          <ImageDetails images={images}/>
+          <ImageDetails />
         </Route>
 
         <Route exact path="/:id/edit">

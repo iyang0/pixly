@@ -1,8 +1,10 @@
 import ImageCard from "./ImageCard"
 import { Link } from "react-router-dom"
+import { useContext } from 'react';
+import ImagesContext from './ImagesContext';
 
-function ImageList({images}){
-  
+function ImageList(){
+  const {images} = useContext(ImagesContext);
   return(<div>IMAGE LIST
     <ul>
       {images.map( image => (

@@ -9,22 +9,27 @@ class Image(db.Model):
 
     __tablename__ = "images"
 
-    id = db.Column( db.Integer,
+    id = db.Column( 
+        db.Integer,
         primary_key=True,
         autoincrement=True)
 
-    title = db.Column( db.Text,
+    title = db.Column( 
+        db.Text,
         nullable=False)
 
-    filename = db.Column( db.Text,
+    filename = db.Column( 
+        db.Text,
         nullable=False)
 
-    path = db.Column( db.Text,
+    path = db.Column( 
+        db.Text,
         nullable=False)
 
 
     def serialize(self):
         return {
+            'id': self.id,
             'name': self.title,
             'filename': self.filename,
             'path': self.path
