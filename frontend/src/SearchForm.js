@@ -1,8 +1,16 @@
 import { useState, useContext} from "react";
 import ImagesContext from "./ImagesContext";
 
-
-function SearchForm({handleSearch}){
+/**
+ * Search component, calls searchPhotos based on search term.
+ * 
+ * state:
+ * - Formdata: object
+ * 
+ * context:
+ * SearchPhotos - ImagesContext
+*/
+function SearchForm(){
   const [formData, setFormData] = useState({search:""});
   const {searchPhotos} = useContext(ImagesContext);
 

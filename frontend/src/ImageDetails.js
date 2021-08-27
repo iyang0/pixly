@@ -3,6 +3,17 @@ import ImageCard from './ImageCard';
 import PixlyApi from "./api";
 import { useState, useEffect } from "react";
 
+/**
+ * get individual image from backend and display it with an image card
+ * and it's details.
+ * 
+ * params:
+ * -id: number
+ * 
+ * state:
+ * -isLoading: boolean
+ * -image: image object
+*/
 function ImageDetails(){
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);

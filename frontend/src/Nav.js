@@ -1,7 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-
+/**
+ * Navbar that routes to home and new image form
+*/
 function Nav() {
   return (
 

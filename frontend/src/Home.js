@@ -4,12 +4,11 @@ import ImageList from "./ImageList";
 
 
 /** Home: shows image search form that filters images shown
+ * and a list of all images or images that matches search
  * 
  *  props:
- *  - images: array of objects with image URL and other metadata
+ *  - isLoading: boolean
  * 
- *  state:
- *  isLoading
  */
 
 function Home({loading}) {

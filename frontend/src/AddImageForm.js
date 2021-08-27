@@ -3,8 +3,19 @@ import PixlyApi from "./api";
 import { useHistory } from "react-router-dom";
 import ImagesContext from './ImagesContext';
 
+/**
+ * Form component to add image to AWS and the details to database
+ * redirects to home after submission
+ * 
+ * context:
+ * -setIsLoading: fn
+ * -setImages: fn
+ * 
+ * states:
+ * -formData: object
+*/
 function AddImageForm() {
-  const { setIsLoading, setImages, images } = useContext(ImagesContext);
+  const { setIsLoading, setImages} = useContext(ImagesContext);
 
   const [formData, setFormData] = useState({ img: "" });
   const history = useHistory()
@@ -19,6 +30,11 @@ function AddImageForm() {
         [name]: value,
       }));
     } else {
+      /**
+       * if adding image, read file
+       * turn it into a 64bit string representing image
+       * add it to the formData object
+       * */
       let fReader = new FileReader();
       let filenameArr = evt.target.value.split("\\")
       let filename = filenameArr[filenameArr.length - 1];
@@ -32,6 +48,7 @@ function AddImageForm() {
           filename
         }));
       }
+      //put the image into preview
       const [file] = evt.target.files;
       if (file) {
         document.getElementById("preview").src = URL.createObjectURL(file);
@@ -39,7 +56,7 @@ function AddImageForm() {
     }
   }
 
-  // Sends search back to parent component
+  // Sends user back to home component after uploading image
   async function handleSubmit(evt) {
     evt.preventDefault();
     let newImage = await PixlyApi.addImage(formData);
