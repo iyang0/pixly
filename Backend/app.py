@@ -122,8 +122,8 @@ def getExifDict(imageBinary):
     print(exifDict)
     return exifDict
 
-@app.route('/test', methods=["GET"])
-def search_image_data(search_term="hubble-space.jpeg"):
+@app.route('/', methods=["GET"])
+def search_image_data(search_term="Photoshop"):
     from sqlalchemy import or_
     images = Image.query\
             .filter(
@@ -132,8 +132,7 @@ def search_image_data(search_term="hubble-space.jpeg"):
                         Image.filename.like('%'+search_term+'%'),
                         Image.Make.like('%'+search_term+'%'),
                         Image.Model.like('%'+search_term+'%'),
-                        Image.Software.like('%'+search_term+'%'),
-                        Image.DateTime.like('%'+search_term+'%')
+                        Image.Software.like('%'+search_term+'%')
                         )
                     ).order_by(Image.id.desc())
     
