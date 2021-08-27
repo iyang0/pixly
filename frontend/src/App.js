@@ -26,9 +26,15 @@ function App() {
   useEffect(function reRenderOnImagesChange() {
     setIsLoading(false);
   }, [images])
+  
+  async function searchPhotos(searchTerm){
+    let imagesFromAPI = await PixlyApi.getAllImages(searchTerm);
+    setImages(imagesFromAPI.images)
+    setIsLoading(true);
+  }
 
   return (
-    <ImagesContext.Provider value={{images, setImages, setIsLoading}}>
+    <ImagesContext.Provider value={{images, setImages, setIsLoading, searchPhotos}}>
       <BrowserRouter>
         <Nav />
         <Routes loading={isLoading}/>

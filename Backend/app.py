@@ -36,7 +36,12 @@ app.config['SECRET_KEY'] = "This is a secret key"
 def get_images():
     """returns a list of image objects,
     the objects contain image metadata and URL"""
-    images = Image.query.all()
+
+    search_term = request.args.get('searchTerm')
+    if search_term :
+        images = search_image_data(search_term)
+    else:
+        images = Image.query.all()
     
 
     return jsonify({ "images": [image.serialize() for image in images] }), 200
@@ -119,21 +124,20 @@ def getExifDict(imageBinary):
         if isinstance(data, bytes):
             data = data.decode()
         exifDict[tag] = data
-    print(exifDict)
     return exifDict
 
-@app.route('/', methods=["GET"])
-def search_image_data(search_term="Photoshop"):
+def search_image_data(search_term="photoshop"):
+    """
+    TODO: add docstring
+    """
     from sqlalchemy import or_
-    images = Image.query\
-            .filter(
-                    or_(
-                        Image.title.like('%'+search_term+'%'),
-                        Image.filename.like('%'+search_term+'%'),
-                        Image.Make.like('%'+search_term+'%'),
-                        Image.Model.like('%'+search_term+'%'),
-                        Image.Software.like('%'+search_term+'%')
-                        )
-                    ).order_by(Image.id.desc())
-    
-    return jsonify({ "images": [image.serialize() for image in images] }), 200
+    images = Image.query.filter(
+        or_(
+            Image.title.ilike('%'+search_term+'%'),
+            Image.filename.ilike('%'+search_term+'%'),
+            Image.Make.ilike('%'+search_term+'%'),
+            Image.Model.ilike('%'+search_term+'%'),
+            Image.Software.ilike('%'+search_term+'%')
+            )
+        ).order_by(Image.id.desc())
+    return images

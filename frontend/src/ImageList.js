@@ -6,7 +6,7 @@ import ImagesContext from './ImagesContext';
 function ImageList(){
   const {images} = useContext(ImagesContext);
 
-  return(<div className="ImageList container">IMAGE LIST
+  return(<div className="ImageList container">
     <div className="row">
       {images.map( image => (
         <div className="col-3" key={image.name}>
