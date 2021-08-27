@@ -22,7 +22,7 @@ for bucket_object in my_bucket.objects.all():
     image_path=f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/{bucket_object.key}"
     response = requests.get(image_path)
     image = Pillow.open(io.BytesIO(response.content))
-    exif_dict = getExifDict(image)
+    exif_dict = getExifDict(io.BytesIO(response.content))
     image_date = parser.parse(exif_dict.get("DateTime")) if exif_dict.get("DateTime") else None
     images.append( Image( 
         title=bucket_object.key,

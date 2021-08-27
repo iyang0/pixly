@@ -121,3 +121,20 @@ def getExifDict(imageBinary):
         exifDict[tag] = data
     print(exifDict)
     return exifDict
+
+@app.route('/test', methods=["GET"])
+def search_image_data(search_term="hubble-space.jpeg"):
+    from sqlalchemy import or_
+    images = Image.query\
+            .filter(
+                    or_(
+                        Image.title.like('%'+search_term+'%'),
+                        Image.filename.like('%'+search_term+'%'),
+                        Image.Make.like('%'+search_term+'%'),
+                        Image.Model.like('%'+search_term+'%'),
+                        Image.Software.like('%'+search_term+'%'),
+                        Image.DateTime.like('%'+search_term+'%')
+                        )
+                    ).order_by(Image.id.desc())
+    
+    return jsonify({ "images": [image.serialize() for image in images] }), 200
