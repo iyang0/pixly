@@ -111,6 +111,7 @@ def page_not_found(e):
 
 
 def getExifDict(imageBinary):
+    """ Takes an input imageBinary created from io.BytesIO() and makes and returns a dictionary of EXIF tags and their data """
     image = Pillow.open(imageBinary)
     exifdata = image.getexif()
 
@@ -126,10 +127,8 @@ def getExifDict(imageBinary):
         exifDict[tag] = data
     return exifDict
 
-def search_image_data(search_term="photoshop"):
-    """
-    TODO: add docstring
-    """
+def search_image_data(search_term):
+    """ Takes an input search_term that is used to search multiple columns in the database for matches. Returns an array of image objects that contain the matched search term """
     from sqlalchemy import or_
     images = Image.query.filter(
         or_(
