@@ -11,18 +11,26 @@ function ImageDetails(){
   useEffect(function getImageOnMount() {
     async function getImage() {
       let imageFromAPI = await PixlyApi.getImage(id);
-      console.log("GET IMAGE", imageFromAPI);
       setImage(imageFromAPI)
+      setIsLoading(false);
     }
     getImage();
-    setIsLoading(false);
   }, [id])
 
   if (isLoading) return <div>Is Loading...</div>;
 
   return (
   <div className="container">
-    <ImageCard image={image}/>
+    <ImageCard image={image}>
+      <ul>
+        {Object.keys(image).map( key =>{
+          if(image[key]){
+            return <li key={key}> {key} : {image[key]}</li>
+          }
+          return null
+        })}
+      </ul>
+    </ImageCard>
   </div>)
 }
 

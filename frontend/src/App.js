@@ -17,15 +17,13 @@ function App() {
   useEffect(function getAllImagesOnMount() {
     async function getAllImages() {
       let imagesFromAPI = await PixlyApi.getAllImages();
-      console.log(imagesFromAPI.images);
       setImages(imagesFromAPI.images)
+      setIsLoading(false);
     }
     getAllImages();
-    setIsLoading(false);
   }, [])
 
   useEffect(function reRenderOnImagesChange() {
-    console.log("USE EFFECT", images);
     setIsLoading(false);
   }, [images])
 

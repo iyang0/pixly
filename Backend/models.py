@@ -36,19 +36,11 @@ class Image(db.Model):
         db.Text
     )
 
-    ShutterSpeedValue = db.Column(
+    Software = db.Column(
         db.Text
     )
 
-    ApertureValue = db.Column(
-        db.Text
-    )
-
-    ISO = db.Column(
-        db.Integer
-    )
-
-    DateTimeOriginal = db.Column(
+    DateTime = db.Column(
         db.DateTime
     )
 
@@ -61,10 +53,8 @@ class Image(db.Model):
             'path': self.path,
             'Make': self.Make,
             'Model': self.Model,
-            'ShutterSpeedValue': self.ShutterSpeedValue,
-            'ApertureValue': self.ApertureValue,
-            'ISO': self.ISO,
-            'DateTimeOriginal': self.DateTimeOriginal,
+            'Software': self.Software,
+            'DateTime': self.DateTime,
         }
         
  

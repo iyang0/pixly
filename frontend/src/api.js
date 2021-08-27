@@ -17,7 +17,6 @@ class PixlyApi {
   /** Get all the images. */
 
   static async getAllImages() {
-    console.log("IN getAllImages")
     let res = await axios.get(`${BASE_URL}/images`)
     return res.data;
   }

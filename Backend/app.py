@@ -11,6 +11,7 @@ import os
 import boto3
 import requests
 from dotenv import load_dotenv
+from dateutil import parser
 
 
 s3 = boto3.resource('s3')
@@ -74,18 +75,18 @@ def add_image():
 
     exifDict = getExifDict(image_bytes)
 
+    image_date = parser.parse(exifDict.get("DateTime")) if exifDict.get("DateTime") else None
+    
     image_path=f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/{filename}"
 
     newImage = Image(
       title=title, 
       path=image_path, 
       filename=filename,
-      Make=exifDict.Make if exifDict.Make else None, 
-      Model=exifDict.Model if exifDict.Model else None,
-      ShutterSpeedValue=exifDict.ShutterSpeedValue if exifDict.ShutterSpeedValue else None,
-      ApertureValue=exifDict.ApertureValue if exifDict.ApertureValue else None,
-      ISO=exifDict.ISO if exifDict.ISO else None,
-      DateTimeOriginal=exifDict.DateTimeOriginal if exifDict.DateTimeOriginal else None
+      Make=exifDict.get("Make"),
+      Model=exifDict.get("Model"),
+      Software=exifDict.get("Software"),
+      DateTime=image_date
       )
     db.session.add(newImage)
     db.session.commit()
@@ -105,9 +106,6 @@ def page_not_found(e):
 
 
 def getExifDict(imageBinary):
-    # image_path = f"https://s3.us-west-1.amazonaws.com/{BUCKET_NAME}/38465451442_fc53a0632d_o.jpg"
-    # response = requests.get(image_path)
-    # image = Pillow.open(io.BytesIO(response.content), mode="r")
     image = Pillow.open(imageBinary)
     exifdata = image.getexif()
 
@@ -121,5 +119,5 @@ def getExifDict(imageBinary):
         if isinstance(data, bytes):
             data = data.decode()
         exifDict[tag] = data
-
+    print(exifDict)
     return exifDict
